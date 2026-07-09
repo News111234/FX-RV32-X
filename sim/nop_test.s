@@ -1,0 +1,68 @@
+# nop_test.s — Test with NOPs between key instructions
+.section .text
+.globl _start
+_start:
+    li sp, 0x400
+    li t0, 0xAAAAAAAA
+    sw t0, 0x100(x0)
+    sw zero, 0xFC(x0)
+
+    li t0, 0x201
+    csrw mtvec, t0
+    li t0, 0x080
+    csrw mie, t0
+    csrr t0, mstatus
+    ori t0, t0, 8
+    csrw mstatus, t0
+
+    li t0, 0x10002000
+    li t1, 30
+    sw t1, 4(t0)
+    li t1, 1
+    sw t1, 0(t0)
+    li t1, 1
+    sw t1, 0xC(t0)
+
+    li t3, 200
+wait_lp:
+    addi t3, t3, -1
+    bnez t3, wait_lp
+
+    lw t0, 0x100(x0)
+    li t1, 0x42
+    beq t0, t1, pass
+fail:
+    li t0, 1
+    sw t0, 0xFC(x0)
+    j fail
+pass:
+    sw zero, 0xFC(x0)
+    j pass
+
+.org 0x200
+    j spin
+    j spin
+    j spin
+    j spin
+    j spin
+    j spin
+    j spin
+    j isr_timer
+
+.org 0x220
+isr_timer:
+    addi t0, x0, 0x42
+    nop
+    nop
+    nop
+    sw t0, 0x100(x0)
+    nop
+    nop
+    li t0, 0x10002000
+    li t1, 4
+    sw t1, 0(t0)
+    mret
+
+.org 0x2A0
+spin:
+    j spin

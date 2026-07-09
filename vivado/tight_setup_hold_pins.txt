@@ -1,0 +1,49 @@
++====================+===================+==========================================================+
+| Launch Setup Clock | Launch Hold Clock | Pin                                                      |
++====================+===================+==========================================================+
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_ifu_top/u_pc_reg/pc_reg[10]/D         |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_ifu_top/u_pc_reg/pc_reg[13]/D         |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_ifu_top/u_pc_reg/pc_reg[5]/D          |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_ifu_top/u_pc_reg/pc_reg[3]/D          |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_ifu_top/u_pc_reg/pc_reg[7]/D          |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_ifu_top/u_pc_reg/pc_reg[17]/D         |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_ifu_top/u_pc_reg/pc_reg[1]/D          |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_ifu_top/u_pc_reg/pc_reg[4]/D          |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_ifu_top/u_pc_reg/pc_reg[20]/D         |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_ifu_top/u_pc_reg/pc_reg[19]/D         |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_ifu_top/u_pc_reg/pc_reg[9]/D          |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_ifu_top/u_pc_reg/pc_reg[31]/D         |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_ifu_top/u_pc_reg/pc_reg[30]/D         |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_ifu_top/u_pc_reg/pc_reg[0]/D          |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_ex_mem_reg/mem_alu_result_o_reg[0]/D  |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_id_ex_reg/ex_alu_src_o_reg/D          |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_if_id_reg/id_instr_o_reg[18]/D        |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_ex_mem_reg/mem_alu_result_o_reg[20]/D |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_if_id_reg/id_instr_o_reg[2]/D         |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_if_id_reg/id_instr_o_reg[23]/D        |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_if_id_reg/id_instr_o_reg[19]/D        |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_if_id_reg/id_instr_o_reg[15]_rep/D    |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_ex_mem_reg/mem_alu_result_o_reg[26]/D |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_id_ex_reg/ex_opcode_o_reg[1]/D        |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_if_id_reg/id_instr_o_reg[21]/D        |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_if_id_reg/id_instr_o_reg[24]/D        |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_id_ex_reg/ex_opcode_o_reg[0]/D        |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_if_id_reg/id_instr_o_reg[9]/D         |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_if_id_reg/id_instr_o_reg[31]/D        |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_if_id_reg/id_instr_o_reg[16]_rep/D    |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_if_id_reg/id_instr_o_reg[16]/D        |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_if_id_reg/id_instr_o_reg[15]/D        |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_if_id_reg/id_instr_o_reg[0]/D         |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_id_ex_reg/ex_opcode_o_reg[3]/D        |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_if_id_reg/id_instr_o_reg[10]/D        |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_id_ex_reg/ex_opcode_o_reg[4]/D        |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_if_id_reg/id_instr_o_reg[6]/D         |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_if_id_reg/id_instr_o_reg[21]_rep__0/D |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_if_id_reg/id_instr_o_reg[29]/D        |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_id_ex_reg/ex_opcode_o_reg[5]/D        |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_ex_mem_reg/mem_alu_result_o_reg[19]/D |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_ex_mem_reg/mem_alu_result_o_reg[23]/D |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_if_id_reg/id_instr_o_reg[30]/D        |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_if_id_reg/id_instr_o_reg[1]/D         |
+| sys_clk            | sys_clk           | u_soc_top/u_core/u_if_id_reg/id_instr_o_reg[16]_rep__0/D |
++--------------------+-------------------+----------------------------------------------------------+
