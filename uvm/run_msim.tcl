@@ -178,17 +178,15 @@ if {$GUI_MODE && $WAVE_ENABLE} {
         uvm_tb_top/u_dut/u_csr_regfile/mie_o \
         uvm_tb_top/u_dut/u_csr_regfile/mip_o
 
-    add wave -group "GPIO" \
-        uvm_tb_top/vif/gpio_pin0 \
-        uvm_tb_top/u_dut/gpio_out \
-        uvm_tb_top/u_dut/gpio_oe
-
     add wave -group "Data RAM Markers" \
         -radix hex \
-        uvm_tb_top/u_dut/u_data_ram/mem[64] \
-        uvm_tb_top/u_dut/u_data_ram/mem[65] \
-        uvm_tb_top/u_dut/u_data_ram/mem[66]
+        uvm_tb_top/data_ram[64] \
+        uvm_tb_top/data_ram[65] \
+        uvm_tb_top/data_ram[66]
 
     # 显示完整信号值
     configure wave -signalnamewidth 1
+
+    # GUI 模式下自动开始仿真
+    run -all
 }
