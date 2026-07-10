@@ -180,9 +180,9 @@ if {$GUI_MODE && $WAVE_ENABLE} {
 
     add wave -group "Data RAM Markers" \
         -radix hex \
-        uvm_tb_top/data_ram[64] \
-        uvm_tb_top/data_ram[65] \
-        uvm_tb_top/data_ram[66]
+        {uvm_tb_top/data_ram[64]} \
+        {uvm_tb_top/data_ram[65]} \
+        {uvm_tb_top/data_ram[66]}
 
     # 显示完整信号值
     configure wave -signalnamewidth 1
