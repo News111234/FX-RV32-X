@@ -1,0 +1,365 @@
+# //  ModelSim SE-64 10.6e Jun 23 2018
+# //
+# //  Copyright 1991-2018 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  ModelSim SE-64 and its associated documentation contain trade
+# //  secrets and commercial or financial information that are the property of
+# //  Mentor Graphics Corporation and are privileged, confidential,
+# //  and exempt from disclosure under the Freedom of Information Act,
+# //  5 U.S.C. Section 552. Furthermore, this information
+# //  is prohibited from disclosure under the Trade Secrets Act,
+# //  18 U.S.C. Section 1905.
+# //
+# set HEX_FILE gpio_toggle_test.hex
+# gpio_toggle_test.hex
+#  set TEST_NAME cpu_test_alu
+# cpu_test_alu
+#  set GUI_MODE 1
+# 1
+#  do run_msim.tcl
+# 0
+# 1
+# all
+# 1
+# // RTL 源文件列表 (Modelsim/Questa 编译顺序)
+# // 顶层: uvm_tb_top.sv (单独用 -sv 编译)
+# 
+# // ==== core — CPU 核心 ====
+# ../core/ifu/pc_reg.v
+# ../core/ifu/ifu_top.v
+# ../core/id/decoder.v
+# ../core/id/ctrl.v
+# ../core/id/imm_gen.v
+# ../core/id/regfile.v
+# ../core/id/id_top.v
+# ../core/exu/alu.v
+# ../core/exu/branch.v
+# ../core/exu/ex_top.v
+# ../core/mem/mem_ctrl.v
+# ../core/mem/mem_top.v
+# ../core/wbu/wb_mux.v
+# ../core/wbu/wb_top.v
+# ../core/pipeline/if_id_reg.v
+# ../core/pipeline/id_ex_reg.v
+# ../core/pipeline/ex_mem_reg.v
+# ../core/pipeline/mem_wb_reg.v
+# ../core/hazard/hazard_unit.v
+# ../core/hazard/forwarding_unit.v
+# ../core/csr/csr_regfile.v
+# ../core/csr/csr_instructions.v
+# ../core/interrupt/interrupt_controller.v
+# ../core/interrupt/interrupt_pipeline.v
+# ../core/core_top.v
+# Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
+# Start time: 19:50:11 on Jun 19,2026
+# vlog -reportprogress 300 -work work "+acc" -sv ../core/ifu/pc_reg.v 
+# -- Compiling module pc_reg
+# 
+# Top level modules:
+# 	pc_reg
+# End time: 19:50:11 on Jun 19,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
+# Start time: 19:50:11 on Jun 19,2026
+# vlog -reportprogress 300 -work work "+acc" -sv ../core/ifu/ifu_top.v 
+# -- Compiling module ifu_top
+# 
+# Top level modules:
+# 	ifu_top
+# End time: 19:50:11 on Jun 19,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
+# Start time: 19:50:11 on Jun 19,2026
+# vlog -reportprogress 300 -work work "+acc" -sv ../core/id/decoder.v 
+# -- Compiling module decoder
+# 
+# Top level modules:
+# 	decoder
+# End time: 19:50:11 on Jun 19,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
+# Start time: 19:50:12 on Jun 19,2026
+# vlog -reportprogress 300 -work work "+acc" -sv ../core/id/ctrl.v 
+# -- Compiling module ctrl
+# 
+# Top level modules:
+# 	ctrl
+# End time: 19:50:12 on Jun 19,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
+# Start time: 19:50:12 on Jun 19,2026
+# vlog -reportprogress 300 -work work "+acc" -sv ../core/id/imm_gen.v 
+# -- Compiling module imm_gen
+# 
+# Top level modules:
+# 	imm_gen
+# End time: 19:50:12 on Jun 19,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
+# Start time: 19:50:12 on Jun 19,2026
+# vlog -reportprogress 300 -work work "+acc" -sv ../core/id/regfile.v 
+# -- Compiling module regfile
+# 
+# Top level modules:
+# 	regfile
+# End time: 19:50:12 on Jun 19,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
+# Start time: 19:50:12 on Jun 19,2026
+# vlog -reportprogress 300 -work work "+acc" -sv ../core/id/id_top.v 
+# -- Compiling module id_top
+# 
+# Top level modules:
+# 	id_top
+# End time: 19:50:12 on Jun 19,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
+# Start time: 19:50:12 on Jun 19,2026
+# vlog -reportprogress 300 -work work "+acc" -sv ../core/exu/alu.v 
+# -- Compiling module alu
+# 
+# Top level modules:
+# 	alu
+# End time: 19:50:12 on Jun 19,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
+# Start time: 19:50:12 on Jun 19,2026
+# vlog -reportprogress 300 -work work "+acc" -sv ../core/exu/branch.v 
+# -- Compiling module branch
+# 
+# Top level modules:
+# 	branch
+# End time: 19:50:12 on Jun 19,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
+# Start time: 19:50:12 on Jun 19,2026
+# vlog -reportprogress 300 -work work "+acc" -sv ../core/exu/ex_top.v 
+# -- Compiling module ex_top
+# 
+# Top level modules:
+# 	ex_top
+# End time: 19:50:12 on Jun 19,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
+# Start time: 19:50:12 on Jun 19,2026
+# vlog -reportprogress 300 -work work "+acc" -sv ../core/mem/mem_ctrl.v 
+# -- Compiling module mem_ctrl
+# 
+# Top level modules:
+# 	mem_ctrl
+# End time: 19:50:12 on Jun 19,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
+# Start time: 19:50:12 on Jun 19,2026
+# vlog -reportprogress 300 -work work "+acc" -sv ../core/mem/mem_top.v 
+# -- Compiling module mem_top
+# 
+# Top level modules:
+# 	mem_top
+# End time: 19:50:12 on Jun 19,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
+# Start time: 19:50:12 on Jun 19,2026
+# vlog -reportprogress 300 -work work "+acc" -sv ../core/wbu/wb_mux.v 
+# -- Compiling module wb_mux
+# 
+# Top level modules:
+# 	wb_mux
+# End time: 19:50:12 on Jun 19,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
+# Start time: 19:50:12 on Jun 19,2026
+# vlog -reportprogress 300 -work work "+acc" -sv ../core/wbu/wb_top.v 
+# -- Compiling module wb_top
+# 
+# Top level modules:
+# 	wb_top
+# End time: 19:50:12 on Jun 19,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
+# Start time: 19:50:12 on Jun 19,2026
+# vlog -reportprogress 300 -work work "+acc" -sv ../core/pipeline/if_id_reg.v 
+# -- Compiling module if_id_reg
+# 
+# Top level modules:
+# 	if_id_reg
+# End time: 19:50:12 on Jun 19,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
+# Start time: 19:50:12 on Jun 19,2026
+# vlog -reportprogress 300 -work work "+acc" -sv ../core/pipeline/id_ex_reg.v 
+# -- Compiling module id_ex_reg
+# 
+# Top level modules:
+# 	id_ex_reg
+# End time: 19:50:12 on Jun 19,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
+# Start time: 19:50:12 on Jun 19,2026
+# vlog -reportprogress 300 -work work "+acc" -sv ../core/pipeline/ex_mem_reg.v 
+# -- Compiling module ex_mem_reg
+# 
+# Top level modules:
+# 	ex_mem_reg
+# End time: 19:50:12 on Jun 19,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
+# Start time: 19:50:12 on Jun 19,2026
+# vlog -reportprogress 300 -work work "+acc" -sv ../core/pipeline/mem_wb_reg.v 
+# -- Compiling module mem_wb_reg
+# 
+# Top level modules:
+# 	mem_wb_reg
+# End time: 19:50:12 on Jun 19,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
+# Start time: 19:50:12 on Jun 19,2026
+# vlog -reportprogress 300 -work work "+acc" -sv ../core/hazard/hazard_unit.v 
+# -- Compiling module hazard_unit
+# 
+# Top level modules:
+# 	hazard_unit
+# End time: 19:50:12 on Jun 19,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
+# Start time: 19:50:12 on Jun 19,2026
+# vlog -reportprogress 300 -work work "+acc" -sv ../core/hazard/forwarding_unit.v 
+# -- Compiling module forwarding_unit
+# 
+# Top level modules:
+# 	forwarding_unit
+# End time: 19:50:12 on Jun 19,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
+# Start time: 19:50:12 on Jun 19,2026
+# vlog -reportprogress 300 -work work "+acc" -sv ../core/csr/csr_regfile.v 
+# -- Compiling module csr_regfile
+# 
+# Top level modules:
+# 	csr_regfile
+# End time: 19:50:12 on Jun 19,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
+# Start time: 19:50:12 on Jun 19,2026
+# vlog -reportprogress 300 -work work "+acc" -sv ../core/csr/csr_instructions.v 
+# -- Compiling module csr_instructions
+# 
+# Top level modules:
+# 	csr_instructions
+# End time: 19:50:13 on Jun 19,2026, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
+# Start time: 19:50:13 on Jun 19,2026
+# vlog -reportprogress 300 -work work "+acc" -sv ../core/interrupt/interrupt_controller.v 
+# -- Compiling module interrupt_controller
+# 
+# Top level modules:
+# 	interrupt_controller
+# End time: 19:50:13 on Jun 19,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
+# Start time: 19:50:13 on Jun 19,2026
+# vlog -reportprogress 300 -work work "+acc" -sv ../core/interrupt/interrupt_pipeline.v 
+# -- Compiling module interrupt_pipeline
+# 
+# Top level modules:
+# 	interrupt_pipeline
+# End time: 19:50:13 on Jun 19,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
+# Start time: 19:50:13 on Jun 19,2026
+# vlog -reportprogress 300 -work work "+acc" -sv ../core/core_top.v 
+# -- Compiling module core_top
+# 
+# Top level modules:
+# 	core_top
+# End time: 19:50:13 on Jun 19,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
+# Start time: 19:50:13 on Jun 19,2026
+# vlog -reportprogress 300 -work work "+acc" "+cover=sbceft" "+define+UVM_NO_DPI" "+incdir+" -suppress 7053 -sv cpu_if.sv 
+# -- Compiling interface cpu_if
+# 
+# Top level modules:
+# 	--none--
+# End time: 19:50:13 on Jun 19,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
+# Start time: 19:50:13 on Jun 19,2026
+# vlog -reportprogress 300 -work work "+acc" "+cover=sbceft" "+define+UVM_NO_DPI" "+incdir+" -suppress 7053 -sv riscv_uvm_pkg.sv 
+# -- Compiling package riscv_uvm_pkg
+# -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
+# ** Note: (vlog-2286) riscv_uvm_pkg.sv(9): Using implicit +incdir+D:/modeltech64_10.6e/uvm-1.1d/../verilog_src/uvm-1.1d/src from import uvm_pkg
+# 
+# Top level modules:
+# 	--none--
+# End time: 19:50:13 on Jun 19,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0, Suppressed Errors: 19
+# Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
+# Start time: 19:50:13 on Jun 19,2026
+# vlog -reportprogress 300 -work work "+acc" "+cover=sbceft" "+define+UVM_NO_DPI" "+incdir+" -suppress 7053 -sv uvm_tb_top.sv 
+# -- Compiling module uvm_tb_top
+# -- Importing package mtiUvm.uvm_pkg (uvm-1.1d Built-in)
+# -- Importing package riscv_uvm_pkg
+# 
+# Top level modules:
+# 	uvm_tb_top
+# End time: 19:50:13 on Jun 19,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vsim -voptargs="+acc" -coverage work.uvm_tb_top "+UVM_TESTNAME=cpu_test_alu" "+TEST_NAME=cpu_test_alu" "+HEX_FILE=gpio_toggle_test.hex" 
+# Start time: 19:50:13 on Jun 19,2026
+# ** Note: (vsim-3812) Design is being optimized...
+# ** Warning: ../core/core_top.v(221): (vopt-2685) [TFMPC] - Too few port connections for 'u_ifu_top'.  Expected 14, found 13.
+# ** Warning: ../core/core_top.v(221): (vopt-2718) [TFMPC] - Missing connection for port 'instr'.
+# ** Warning: ../core/core_top.v(460): (vopt-2685) [TFMPC] - Too few port connections for 'u_mem_top'.  Expected 23, found 22.
+# ** Warning: ../core/core_top.v(460): (vopt-2718) [TFMPC] - Missing connection for port 'mem_exception_o'.
+# Loading sv_std.std
+# Loading work.cpu_if(fast)
+# Loading mtiUvm.uvm_pkg
+# Loading work.riscv_uvm_pkg(fast)
+# Loading work.uvm_tb_top(fast)
+# Loading work.cpu_if(fast)
+# Loading work.core_top(fast)
+# Loading work.ifu_top(fast)
+# Loading work.pc_reg(fast)
+# Loading work.if_id_reg(fast)
+# Loading work.id_top(fast)
+# Loading work.decoder(fast)
+# Loading work.imm_gen(fast)
+# Loading work.regfile(fast)
+# Loading work.ctrl(fast)
+# Loading work.id_ex_reg(fast)
+# Loading work.hazard_unit(fast)
+# Loading work.forwarding_unit(fast)
+# Loading work.ex_top(fast)
+# Loading work.alu(fast)
+# Loading work.branch(fast)
+# Loading work.ex_mem_reg(fast)
+# Loading work.mem_top(fast)
+# Loading work.mem_wb_reg(fast)
+# Loading work.wb_top(fast)
+# Loading work.wb_mux(fast)
+# Loading work.csr_regfile(fast)
+# Loading work.csr_instructions(fast)
+# Loading work.interrupt_controller(fast)
+# Loading work.interrupt_pipeline(fast)
+# Loading mtiUvm.questa_uvm_pkg(fast)
+# ** Warning: (vsim-3838) uvm_tb_top.sv(96): Variable '/uvm_tb_top/vif/intr_i2c' written by continuous and procedural assignments. 
+# One of the assignments is implicit. See cpu_if.sv(28).
+#    Time: 0 ps  Iteration: 0  Instance: /uvm_tb_top File: uvm_tb_top.sv
+# ** Warning: (vsim-3838) uvm_tb_top.sv(95): Variable '/uvm_tb_top/vif/intr_spi' written by continuous and procedural assignments. 
+# One of the assignments is implicit. See cpu_if.sv(27).
+#    Time: 0 ps  Iteration: 0  Instance: /uvm_tb_top File: uvm_tb_top.sv
+# ** Warning: (vsim-3838) uvm_tb_top.sv(94): Variable '/uvm_tb_top/vif/intr_external' written by continuous and procedural assignments. 
+# One of the assignments is implicit. See cpu_if.sv(26).
+#    Time: 0 ps  Iteration: 0  Instance: /uvm_tb_top File: uvm_tb_top.sv
+# ** Warning: (vsim-3838) uvm_tb_top.sv(93): Variable '/uvm_tb_top/vif/intr_software' written by continuous and procedural assignments. 
+# One of the assignments is implicit. See cpu_if.sv(25).
+#    Time: 0 ps  Iteration: 0  Instance: /uvm_tb_top File: uvm_tb_top.sv
+# ** Warning: (vsim-3838) uvm_tb_top.sv(92): Variable '/uvm_tb_top/vif/intr_timer' written by continuous and procedural assignments. 
+# One of the assignments is implicit. See cpu_if.sv(24).
+#    Time: 0 ps  Iteration: 0  Instance: /uvm_tb_top File: uvm_tb_top.sv
+# Loading D:/modeltech64_10.6e/uvm-1.1d\win64\uvm_dpi.dll
+# End time: 20:15:35 on Jun 19,2026, Elapsed time: 0:25:22
+# Errors: 0, Warnings: 9, Suppressed Errors: 91
