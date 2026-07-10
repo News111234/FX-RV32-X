@@ -1,0 +1,43 @@
+# run_cli_triple.do — 三级嵌套中断 (SW→Timer→GPIO, BANKS=4)
+# SW中断由 testbench 的 sw_intr reg 在 ~500ns 自动触发
+if {[file exists work]} { vdel -all }; vlib work
+set R ../core; set S ../soc; set T ../tb
+foreach f [list \
+$R/ifu/pc_reg.v $R/ifu/ifu_top.v \
+$R/id/decoder.v $R/id/ctrl.v $R/id/imm_gen.v $R/id/regfile.v $R/id/id_top.v \
+$R/exu/alu.v $R/exu/branch.v $R/exu/ex_top.v \
+$R/mem/mem_ctrl.v $R/mem/mem_top.v \
+$R/wbu/wb_mux.v $R/wbu/wb_top.v \
+$R/pipeline/if_id_reg.v $R/pipeline/id_ex_reg.v $R/pipeline/ex_mem_reg.v $R/pipeline/mem_wb_reg.v \
+$R/hazard/hazard_unit.v $R/hazard/forwarding_unit.v \
+$R/csr/csr_regfile.v $R/csr/csr_instructions.v \
+$R/interrupt/interrupt_controller.v $R/interrupt/interrupt_pipeline.v $R/interrupt/bank_controller.v \
+$R/core_top.v \
+$S/mem/inst_rom.v $S/mem/inst_bram.v $S/mem/data_ram.v \
+$S/bus/bus_arbiter.v \
+$S/periph/uart_tx.v $S/periph/uart_rx.v $S/periph/uart_ctrl.v \
+$S/periph/gpio.v $S/periph/timer.v \
+$S/periph/spi_master.v $S/periph/spi_flash_ctrl.v $S/periph/i2c_master.v \
+$S/top/soc_top.v \
+$T/tb_nested_check.v] { vlog -quiet $f }
+file copy -force triple_nested_test.hex nested_test.hex
+vsim -onfinish stop -c -gUSE_INST_ROM=1 -gSHADOW_BANKS=4 work.tb_nested_check
+run 10us
+set r [exam u_soc_top/u_data_ram/mem\[64\]]
+set r2 [exam u_soc_top/u_data_ram/mem\[65\]]
+set r3 [exam u_soc_top/u_data_ram/mem\[66\]]
+set sw_cyc [exam u_soc_top/u_data_ram/mem\[72\]]
+set tm_cyc [exam u_soc_top/u_data_ram/mem\[73\]]
+set gp_cyc [exam u_soc_top/u_data_ram/mem\[74\]]
+puts "mem\[64\]=$r (SW marker, expected 32'hCAFE0003)"
+puts "mem\[65\]=$r2 (Timer marker, expected 32'hDEAD0007)"
+puts "mem\[66\]=$r3 (GPIO marker, expected 32'hBEEF000B)"
+puts "mem\[72\]=$sw_cyc (mcycle at SW ISR entry)"
+puts "mem\[73\]=$tm_cyc (mcycle at Timer ISR entry)"
+puts "mem\[74\]=$gp_cyc (mcycle at GPIO ISR entry)"
+if {[string equal -nocase $r 32'hCAFE0003] && [string equal -nocase $r2 32'hDEAD0007] && [string equal -nocase $r3 32'hBEEF000B]} {
+    puts "=> PASS (3-level nested: SW->Timer->GPIO)"
+} else {
+    puts "=> FAIL ***"
+}
+quit -f

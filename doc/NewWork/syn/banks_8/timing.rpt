@@ -1,0 +1,151 @@
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+Design : soc_top_USE_INST_ROM1_SHADOW_BANKS8
+Version: Q-2019.12-SP5-3
+Date   : Thu Jul  2 16:39:34 2026
+****************************************
+
+ # A fanout number of 1000 was used for high fanout net computations.
+
+Operating Conditions: tt_v1p2_25c   Library: scc55nll_hd_rvt_tt_v1p2_25c_basic
+Wire Load Model Mode: top
+
+  Startpoint: u_core/u_if_id_reg/id_instr_o_reg[19]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: u_core/u_ex_mem_reg/mem_alu_result_o_reg[31]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Point                                                   Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  u_core/u_if_id_reg/id_instr_o_reg[19]/CK (DQHDV2)       0.00 #     0.00 r
+  u_core/u_if_id_reg/id_instr_o_reg[19]/Q (DQHDV2)        0.18       0.18 r
+  u_core/u_if_id_reg/id_instr_o[19] (if_id_reg)           0.00       0.18 r
+  u_core/u_id_top/instr[19] (id_top_SHADOW_BANKS8)        0.00       0.18 r
+  u_core/u_id_top/u_decoder/instr_i[19] (decoder)         0.00       0.18 r
+  u_core/u_id_top/u_decoder/rs1_addr_o[4] (decoder)       0.00       0.18 r
+  u_core/u_id_top/rs1_addr_o[4] (id_top_SHADOW_BANKS8)
+                                                          0.00       0.18 r
+  u_core/u_hazard_unit/id_rs1_addr_i[4] (hazard_unit_0)
+                                                          0.00       0.18 r
+  u_core/u_hazard_unit/U15/ZN (XNOR2HDV2)                 0.11       0.29 f
+  u_core/u_hazard_unit/U7/ZN (AOI33HDV2)                  0.06       0.34 r
+  u_core/u_hazard_unit/U6/ZN (NOR2HDV4)                   0.04       0.38 f
+  u_core/u_hazard_unit/stall_id_o (hazard_unit_0)         0.00       0.38 f
+  u_core/u_forwarding_unit/stall_i (forwarding_unit)      0.00       0.38 f
+  u_core/u_forwarding_unit/U15/ZN (AOI211HDV4)            0.06       0.45 r
+  u_core/u_forwarding_unit/U11/ZN (NAND4HDV0)             0.07       0.51 f
+  u_core/u_forwarding_unit/U10/ZN (NOR2HDV2)              0.06       0.57 r
+  u_core/u_forwarding_unit/forwardA_o[1] (forwarding_unit)
+                                                          0.00       0.57 r
+  u_core/u_ex_top/forwardA_i[1] (ex_top)                  0.00       0.57 r
+  u_core/u_ex_top/U36/ZN (XNOR2HDV4)                      0.11       0.68 f
+  u_core/u_ex_top/U208/ZN (AOI222HDV4)                    0.10       0.79 r
+  u_core/u_ex_top/U292/ZN (IOA22HDV4)                     0.05       0.84 f
+  u_core/u_ex_top/u_alu/op1_i[0] (alu)                    0.00       0.84 f
+  u_core/u_ex_top/u_alu/U7/ZN (CLKNHDV4)                  0.03       0.86 r
+  u_core/u_ex_top/u_alu/U8/ZN (INHDV4)                    0.02       0.88 f
+  u_core/u_ex_top/u_alu/sub_47/A[0] (alu_DW01_sub_0_DW01_sub_7)
+                                                          0.00       0.88 f
+  u_core/u_ex_top/u_alu/sub_47/U14/ZN (CLKNHDV4)          0.01       0.89 r
+  u_core/u_ex_top/u_alu/sub_47/U79/ZN (CLKNAND2HDV1)      0.04       0.94 f
+  u_core/u_ex_top/u_alu/sub_47/U106/ZN (IAO21HDV2)        0.08       1.01 f
+  u_core/u_ex_top/u_alu/sub_47/U77/Z (AO21HDV2)           0.10       1.11 f
+  u_core/u_ex_top/u_alu/sub_47/U90/ZN (IAO21HDV2)         0.07       1.18 f
+  u_core/u_ex_top/u_alu/sub_47/U78/ZN (INAND2HDV2)        0.07       1.26 f
+  u_core/u_ex_top/u_alu/sub_47/U95/ZN (IAO21HDV2)         0.08       1.34 f
+  u_core/u_ex_top/u_alu/sub_47/U9/ZN (INAND2HDV8)         0.06       1.40 f
+  u_core/u_ex_top/u_alu/sub_47/U98/ZN (IAO21HDV2)         0.07       1.46 f
+  u_core/u_ex_top/u_alu/sub_47/U8/Z (AO21HDV4)            0.10       1.57 f
+  u_core/u_ex_top/u_alu/sub_47/U92/ZN (IAO21HDV2)         0.07       1.64 f
+  u_core/u_ex_top/u_alu/sub_47/U76/Z (AO21HDV2)           0.10       1.74 f
+  u_core/u_ex_top/u_alu/sub_47/U99/ZN (IAO21HDV2)         0.07       1.81 f
+  u_core/u_ex_top/u_alu/sub_47/U75/Z (AO21HDV2)           0.10       1.91 f
+  u_core/u_ex_top/u_alu/sub_47/U100/ZN (IAO21HDV2)        0.07       1.99 f
+  u_core/u_ex_top/u_alu/sub_47/U31/Z (AO21HDV0)           0.11       2.10 f
+  u_core/u_ex_top/u_alu/sub_47/U29/ZN (IAO21HDV2)         0.08       2.18 f
+  u_core/u_ex_top/u_alu/sub_47/U27/ZN (NOR2HDV4)          0.06       2.24 r
+  u_core/u_ex_top/u_alu/sub_47/U101/ZN (AOI21HDV4)        0.04       2.28 f
+  u_core/u_ex_top/u_alu/sub_47/U102/ZN (IAO21HDV4)        0.06       2.34 r
+  u_core/u_ex_top/u_alu/sub_47/U36/ZN (AOI21HDV2)         0.05       2.39 f
+  u_core/u_ex_top/u_alu/sub_47/U35/ZN (IAO21HDV2)         0.05       2.44 r
+  u_core/u_ex_top/u_alu/sub_47/U66/ZN (AOI21HDV2)         0.05       2.49 f
+  u_core/u_ex_top/u_alu/sub_47/U65/ZN (IAO21HDV2)         0.05       2.54 r
+  u_core/u_ex_top/u_alu/sub_47/U108/ZN (AOI21HDV2)        0.04       2.58 f
+  u_core/u_ex_top/u_alu/sub_47/U17/ZN (IAO21HDV4)         0.06       2.65 r
+  u_core/u_ex_top/u_alu/sub_47/U42/ZN (AOI21HDV2)         0.05       2.70 f
+  u_core/u_ex_top/u_alu/sub_47/U41/ZN (IAO21HDV2)         0.05       2.75 r
+  u_core/u_ex_top/u_alu/sub_47/U69/ZN (AOI21HDV2)         0.05       2.79 f
+  u_core/u_ex_top/u_alu/sub_47/U68/ZN (IAO21HDV2)         0.05       2.84 r
+  u_core/u_ex_top/u_alu/sub_47/U94/ZN (AOI21HDV2)         0.05       2.89 f
+  u_core/u_ex_top/u_alu/sub_47/U38/ZN (IAO21HDV2)         0.05       2.94 r
+  u_core/u_ex_top/u_alu/sub_47/U50/ZN (AOI21HDV2)         0.05       2.98 f
+  u_core/u_ex_top/u_alu/sub_47/U49/ZN (IAO21HDV2)         0.05       3.03 r
+  u_core/u_ex_top/u_alu/sub_47/U45/ZN (AOI21HDV2)         0.05       3.08 f
+  u_core/u_ex_top/u_alu/sub_47/U44/ZN (IAO21HDV2)         0.05       3.13 r
+  u_core/u_ex_top/u_alu/sub_47/U54/ZN (AOI21HDV2)         0.04       3.17 f
+  u_core/u_ex_top/u_alu/sub_47/U1/ZN (IAO21HDV4)          0.06       3.23 r
+  u_core/u_ex_top/u_alu/sub_47/U52/ZN (AOI21HDV2)         0.05       3.28 f
+  u_core/u_ex_top/u_alu/sub_47/U7/ZN (IAO21HDV4)          0.06       3.34 r
+  u_core/u_ex_top/u_alu/sub_47/U56/ZN (AOI21HDV2)         0.05       3.39 f
+  u_core/u_ex_top/u_alu/sub_47/U13/ZN (IAO21HDV4)         0.07       3.46 r
+  u_core/u_ex_top/u_alu/sub_47/U11/ZN (AOI21HDV4)         0.04       3.50 f
+  u_core/u_ex_top/u_alu/sub_47/U47/ZN (IAO21HDV2)         0.05       3.55 r
+  u_core/u_ex_top/u_alu/sub_47/U71/ZN (AOI21HDV2)         0.04       3.60 f
+  u_core/u_ex_top/u_alu/sub_47/U6/ZN (IAO21HDV4)          0.07       3.66 r
+  u_core/u_ex_top/u_alu/sub_47/U4/ZN (AOI21HDV4)          0.04       3.70 f
+  u_core/u_ex_top/u_alu/sub_47/U5/ZN (IAO21HDV4)          0.06       3.76 r
+  u_core/u_ex_top/u_alu/sub_47/U107/ZN (AOI21HDV2)        0.04       3.80 f
+  u_core/u_ex_top/u_alu/sub_47/U61/ZN (IAO21HDV2)         0.07       3.88 r
+  u_core/u_ex_top/u_alu/sub_47/U97/ZN (AOI21HDV2)         0.05       3.93 f
+  u_core/u_ex_top/u_alu/sub_47/U59/ZN (IAO21HDV2)         0.07       4.00 r
+  u_core/u_ex_top/u_alu/sub_47/U96/ZN (AOI21HDV2)         0.05       4.05 f
+  u_core/u_ex_top/u_alu/sub_47/U63/ZN (IAO21HDV2)         0.07       4.12 r
+  u_core/u_ex_top/u_alu/sub_47/U105/ZN (AOI21HDV2)        0.05       4.17 f
+  u_core/u_ex_top/u_alu/sub_47/U73/ZN (IAO21HDV2)         0.07       4.24 r
+  u_core/u_ex_top/u_alu/sub_47/U104/ZN (AOI21HDV2)        0.05       4.29 f
+  u_core/u_ex_top/u_alu/sub_47/U126/ZN (IAO21HDV0)        0.06       4.35 r
+  u_core/u_ex_top/u_alu/sub_47/U122/Z (AO21HDV0)          0.07       4.42 r
+  u_core/u_ex_top/u_alu/sub_47/U103/ZN (OAI21HDV2)        0.04       4.46 f
+  u_core/u_ex_top/u_alu/sub_47/U109/ZN (IAO21HDV2)        0.07       4.53 f
+  u_core/u_ex_top/u_alu/sub_47/U119/ZN (AOI21HDV0)        0.06       4.59 r
+  u_core/u_ex_top/u_alu/sub_47/U84/ZN (INHDV1)            0.02       4.61 f
+  u_core/u_ex_top/u_alu/sub_47/U28/ZN (NAND2HDV1)         0.02       4.63 r
+  u_core/u_ex_top/u_alu/sub_47/U12/ZN (CLKNAND2HDV1)      0.02       4.66 f
+  u_core/u_ex_top/u_alu/sub_47/DIFF[31] (alu_DW01_sub_0_DW01_sub_7)
+                                                          0.00       4.66 f
+  u_core/u_ex_top/u_alu/U24/ZN (NAND2HDV1)                0.02       4.68 r
+  u_core/u_ex_top/u_alu/U31/Z (AND3HDV2)                  0.07       4.75 r
+  u_core/u_ex_top/u_alu/U61/ZN (NAND3HDV2)                0.05       4.80 f
+  u_core/u_ex_top/u_alu/U37/ZN (NAND2HDV1)                0.03       4.83 r
+  u_core/u_ex_top/u_alu/U35/ZN (CLKNAND2HDV1)             0.04       4.87 f
+  u_core/u_ex_top/u_alu/result_o[31] (alu)                0.00       4.87 f
+  u_core/u_ex_top/alu_result_o[31] (ex_top)               0.00       4.87 f
+  u_core/u_ex_mem_reg/ex_alu_result_i[31] (ex_mem_reg)
+                                                          0.00       4.87 f
+  u_core/u_ex_mem_reg/U30/Z (AO22HDV2)                    0.08       4.96 f
+  u_core/u_ex_mem_reg/mem_alu_result_o_reg[31]/D (DQHDV0)
+                                                          0.00       4.96 f
+  data arrival time                                                  4.96
+
+  clock clk (rise edge)                                   5.00       5.00
+  clock network delay (ideal)                             0.00       5.00
+  u_core/u_ex_mem_reg/mem_alu_result_o_reg[31]/CK (DQHDV0)
+                                                          0.00       5.00 r
+  library setup time                                     -0.04       4.96
+  data required time                                                 4.96
+  --------------------------------------------------------------------------
+  data required time                                                 4.96
+  data arrival time                                                 -4.96
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.00
+
+
+1

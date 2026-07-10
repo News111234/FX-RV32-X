@@ -1,0 +1,148 @@
+ 
+****************************************
+Report : power
+        -cell
+        -hier
+        -analysis_effort low
+        -sort_mode cell_internal_power
+Design : soc_top_USE_INST_ROM1_SHADOW_BANKS4
+Version: Q-2019.12-SP5-3
+Date   : Thu Jul  2 16:22:19 2026
+****************************************
+
+
+Library(s) Used:
+
+    scc55nll_hd_rvt_tt_v1p2_25c_basic (File: /home/yifengxin/smic55_rvt_lib/synopsys/1.2v/scc55nll_hd_rvt_tt_v1p2_25c_basic.db)
+
+
+Operating Conditions: tt_v1p2_25c   Library: scc55nll_hd_rvt_tt_v1p2_25c_basic
+Wire Load Model Mode: top
+
+
+Global Operating Voltage = 1.2  
+Power-specific unit information :
+    Voltage Units = 1V
+    Capacitance Units = 1.000000pf
+    Time Units = 1ns
+    Dynamic Power Units = 1mW    (derived from V,C,T units)
+    Leakage Power Units = 1uW
+
+
+
+  Attributes
+  ----------
+      h  -  Hierarchical cell
+
+                        Cell      Driven Net  Tot Dynamic      Cell
+                        Internal  Switching   Power            Leakage
+Cell                    Power     Power       (% Cell/Tot)     Power      Attrs
+--------------------------------------------------------------------------------
+u_data_ram                64.1123       N/A        N/A (N/A)     16.0008  h
+u_core                    11.4360       N/A        N/A (N/A)      3.2972  h
+u_uart_ctrl                0.5550       N/A        N/A (N/A)      0.1614  h
+u_gpio                     0.4768       N/A        N/A (N/A)      0.1187  h
+u_spi_master               0.1668       N/A        N/A (N/A)      0.0548  h
+u_i2c_master               0.1555       N/A        N/A (N/A)      0.0515  h
+u_timer                    0.1249       N/A        N/A (N/A)      0.0476  h
+u_spi_flash                0.1035       N/A        N/A (N/A)      0.0317  h
+u_bus_arbiter              0.0807       N/A        N/A (N/A)      0.0314  h
+U2                         0.0000    0.0000      0.000 (N/A)      0.0002   
+gen_inst_rom.u_inst_rom    0.0000       N/A        N/A (N/A)      0.0015  h
+--------------------------------------------------------------------------------
+Totals (11 cells)         77.211mW     N/A         N/A (N/A)     19.797uW
+
+--------------------------------------------------------------------------------
+                                       Switch   Int      Leak     Total
+Hierarchy                              Power    Power    Power    Power    %
+--------------------------------------------------------------------------------
+soc_top_USE_INST_ROM1_SHADOW_BANKS4       0.116   77.208   19.805   77.344 100.0
+  u_i2c_master (i2c_master)            8.39e-04    0.156 5.15e-02    0.156   0.2
+    add_126 (i2c_master_DW01_inc_0_DW01_inc_5)
+                                          0.000    0.000 4.96e-03 4.96e-06   0.0
+  u_spi_master (spi_master)            1.22e-03    0.167 5.48e-02    0.168   0.2
+    add_123 (spi_master_DW01_inc_1_DW01_inc_7)
+                                          0.000    0.000 4.96e-03 4.96e-06   0.0
+  u_timer (timer)                      1.05e-03    0.125 4.76e-02    0.126   0.2
+    sub_85 (timer_DW01_dec_0_DW01_dec_3)
+                                       1.15e-05 1.54e-05 5.37e-03 3.23e-05   0.0
+  u_spi_flash (spi_flash_ctrl)         2.52e-04    0.103 3.17e-02    0.104   0.1
+    add_109 (spi_flash_ctrl_DW01_inc_0_DW01_inc_8)
+                                          0.000    0.000 2.31e-03 2.31e-06   0.0
+  u_gpio (gpio)                        5.68e-03    0.477    0.119    0.483   0.6
+  u_uart_ctrl (uart_ctrl_CLK_FREQ200000000_BAUD_RATE115200)
+                                       5.51e-03    0.555    0.161    0.561   0.7
+    add_178 (uart_ctrl_CLK_FREQ200000000_BAUD_RATE115200_DW01_inc_0_DW01_inc_9)
+                                          0.000    0.000 1.98e-03 1.98e-06   0.0
+    u_uart_rx (uart_rx_CLK_FREQ200000000_BAUD_RATE115200)
+                                       1.00e-03 8.32e-02 2.33e-02 8.42e-02   0.1
+      r79 (uart_rx_CLK_FREQ200000000_BAUD_RATE115200_DW01_inc_0_DW01_inc_12)
+                                       9.74e-05 2.49e-04 4.97e-03 3.52e-04   0.0
+    u_uart_tx (uart_tx_CLK_FREQ200000000_BAUD_RATE115200)
+                                       2.44e-04 9.63e-02 3.27e-02 9.66e-02   0.1
+      r87 (uart_tx_CLK_FREQ200000000_BAUD_RATE115200_DW01_inc_0_DW01_inc_13)
+                                          0.000    0.000 1.03e-02 1.03e-05   0.0
+  u_bus_arbiter (bus_arbiter)          1.07e-04 8.07e-02 3.14e-02 8.08e-02   0.1
+  u_data_ram (data_ram)                8.24e-04   64.112   16.001   64.129  82.9
+  gen_inst_rom.u_inst_rom (inst_rom)      0.000    0.000 1.53e-03 1.53e-06   0.0
+  u_core (core_top_0_4_0)                 0.101   11.436    3.297   11.540  14.9
+    sub_657 (core_top_0_4_0_DW01_sub_0_DW01_sub_6)
+                                       2.51e-03 2.02e-03 5.49e-03 4.54e-03   0.0
+    u_interrupt_pipeline (interrupt_pipeline_SHADOW_BANKS4)
+                                       4.11e-03    0.294 8.51e-02    0.298   0.4
+      add_90_aco (interrupt_pipeline_SHADOW_BANKS4_DW01_add_0_DW01_add_1)
+                                       9.68e-04 1.78e-03 9.95e-03 2.75e-03   0.0
+    u_bank_controller (bank_controller_SHADOW_BANKS4_OVERFLOW_POLICY0)
+                                          0.000    0.000 1.18e-03 1.18e-06   0.0
+    u_interrupt_controller (interrupt_controller)
+                                       3.06e-06 8.27e-03 1.66e-02 8.29e-03   0.0
+      add_108_aco (interrupt_controller_DW01_add_0_DW01_add_8)
+                                       3.06e-06 2.25e-05 1.05e-02 3.61e-05   0.0
+    u_csr_instructions (csr_instructions)
+                                          0.000    0.000 4.77e-03 4.77e-06   0.0
+    u_csr_regfile (csr_regfile)        5.64e-03    0.697    0.203    0.703   0.9
+      add_123 (csr_regfile_DW01_inc_1_DW01_inc_15)
+                                       2.18e-04 5.50e-04 2.09e-02 7.89e-04   0.0
+      add_124 (csr_regfile_DW01_inc_0_DW01_inc_14)
+                                       2.18e-04 5.50e-04 2.09e-02 7.89e-04   0.0
+    u_wb_top (wb_top)                     0.000 1.26e-05 6.87e-03 1.94e-05   0.0
+      u_wb_mux (wb_mux)                   0.000 1.26e-05 6.87e-03 1.94e-05   0.0
+    u_mem_wb_reg (mem_wb_reg)          1.71e-03    0.252 5.73e-02    0.254   0.3
+    u_mem_top (mem_top)                   0.000    0.000 1.42e-04 1.42e-07   0.0
+    u_ex_mem_reg (ex_mem_reg)          2.39e-03    0.318 7.35e-02    0.320   0.4
+    u_ex_top (ex_top)                  5.25e-04 3.81e-03    0.244 4.58e-03   0.0
+      add_162 (ex_top_DW01_add_2_DW01_add_4)
+                                       1.91e-04 1.63e-03 2.07e-02 1.84e-03   0.0
+      add_163 (ex_top_DW01_add_1_DW01_add_3)
+                                          0.000    0.000 2.06e-02 2.06e-05   0.0
+      add_184 (ex_top_DW01_add_0_DW01_add_2)
+                                       1.62e-04 5.13e-04 8.89e-03 6.84e-04   0.0
+      u_branch (branch)                1.70e-04 1.64e-03 3.68e-02 1.85e-03   0.0
+        r66 (branch_DW01_cmp6_0_DW01_cmp6_2)
+                                          0.000    0.000 7.64e-03 7.64e-06   0.0
+        add_85 (branch_DW01_add_0_DW01_add_5)
+                                       1.70e-04 1.63e-03 2.07e-02 1.82e-03   0.0
+      u_alu (alu)                         0.000    0.000    0.134 1.34e-04   0.0
+        add_46 (alu_DW01_add_0_DW01_add_6)
+                                          0.000    0.000 2.10e-02 2.10e-05   0.0
+        sub_47 (alu_DW01_sub_0_DW01_sub_7)
+                                          0.000    0.000 2.62e-02 2.62e-05   0.0
+        sll_50 (alu_DW01_ash_0)           0.000    0.000 2.71e-02 2.71e-05   0.0
+        srl_51 (alu_DW_rash_1)            0.000    0.000 1.01e-02 1.01e-05   0.0
+        sra_52 (alu_DW_rash_0)            0.000    0.000 1.17e-02 1.17e-05   0.0
+    u_forwarding_unit (forwarding_unit)
+                                          0.000    0.000 7.01e-03 7.01e-06   0.0
+    u_hazard_unit (hazard_unit_0)         0.000    0.000 3.90e-03 3.90e-06   0.0
+    u_id_ex_reg (id_ex_reg)            3.37e-03    0.349 7.99e-02    0.352   0.5
+    u_id_top (id_top_SHADOW_BANKS4)    7.72e-02    9.330    2.439    9.410  12.2
+      u_ctrl (ctrl)                       0.000    0.000 9.42e-04 9.42e-07   0.0
+      u_regfile (regfile_SHADOW_EN1_SHADOW_BANKS4)
+                                       7.72e-02    9.330    2.431    9.410  12.2
+      u_imm_gen (imm_gen)              1.24e-07 1.12e-07 3.88e-03 4.11e-06   0.0
+      u_decoder (decoder)                 0.000    0.000 2.97e-03 2.97e-06   0.0
+    u_if_id_reg (if_id_reg)            1.25e-03    0.119 2.81e-02    0.121   0.2
+    u_ifu_top (ifu_top_0)              2.31e-03 6.23e-02 3.10e-02 6.46e-02   0.1
+      r56 (ifu_top_0_DW01_add_0_DW01_add_7)
+                                       2.17e-04 6.30e-04 8.86e-03 8.56e-04   0.0
+      u_pc_reg (pc_reg)                1.34e-03 6.01e-02 1.39e-02 6.15e-02   0.1
+1

@@ -1,0 +1,53 @@
+# Vivado
+vivado/RISCV_TEST/
+vivado/**/synth_*/
+vivado/**/*.backup.jou
+vivado/**/*.backup.log
+*.jou
+*.log
+*.str
+*.dcp
+*.bit
+*.bin
+*.mcs
+*.prm
+*.xpr
+*.cache/
+*.hw/
+*.ip_user_files/
+*.sim/
+*.gen/
+
+# Verilator simulation
+sim/obj_dir/
+sim/*.vcd
+sim/*.fst
+
+# Modelsim
+uvm/work/
+uvm/**/work/
+transcript
+vsim.wlf
+*.wlf
+modelsim.ini
+vlog.opt
+vsim.dbg
+*.vstf
+*.ucdb
+vcover*
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Vivado backup files
+*.backup.jou
+*.backup.log

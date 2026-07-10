@@ -1,0 +1,3 @@
+source /opt/eda/synopsys/syn.bashrc
+
+de_shell -f run_synth.tcl | tee run1.log

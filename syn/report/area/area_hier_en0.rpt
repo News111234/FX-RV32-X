@@ -1,0 +1,95 @@
+ 
+****************************************
+Report : area
+Design : soc_top
+Version: Q-2019.12-SP5-3
+Date   : Wed Jun 10 12:33:07 2026
+****************************************
+
+Library(s) Used:
+
+    scc55nll_hd_rvt_tt_v1p2_25c_basic (File: /home/yifengxin/smic55_rvt_lib/synopsys/1.2v/scc55nll_hd_rvt_tt_v1p2_25c_basic.db)
+
+Number of ports:                         8799
+Number of nets:                         60854
+Number of cells:                        53580
+Number of combinational cells:          33786
+Number of sequential cells:             19293
+Number of macros/black boxes:               0
+Number of buf/inv:                       5111
+Number of references:                      10
+
+Combinational area:              70640.359694
+Buf/Inv area:                     5393.079988
+Noncombinational area:          129804.922433
+Macro/Black Box area:                0.000000
+Net Interconnect area:      undefined  (No wire load specified)
+
+Total cell area:                200445.282127
+Total area:                 undefined
+
+Hierarchical area distribution
+------------------------------
+
+                                  Global cell area              Local cell area
+                                  --------------------  ------------------------------- 
+Hierarchical cell                 Absolute     Percent  Combi-      Noncombi-    Black-
+                                  Total        Total    national    national     boxes   Design
+--------------------------------  -----------  -------  ----------  -----------  ------  -----------------------------------------------------------------
+soc_top                           200445.2821    100.0      1.9600       0.0000  0.0000  soc_top
+u_bus_arbiter                        693.2800      0.3    335.7200     357.5600  0.0000  bus_arbiter
+u_core                             27879.0400     13.9    217.5600       0.0000  0.0000  core_top
+u_core/sub_607                        98.2800      0.0     98.2800       0.0000  0.0000  core_top_DW01_sub_0_DW01_sub_3
+u_core/u_csr_instructions            170.2400      0.1    170.2400       0.0000  0.0000  csr_instructions
+u_core/u_csr_regfile                3956.9600      2.0   1349.6000    2114.0000  0.0000  csr_regfile
+u_core/u_csr_regfile/add_124         246.6800      0.1    246.6800       0.0000  0.0000  csr_regfile_DW01_inc_1_DW01_inc_13
+u_core/u_csr_regfile/add_125         246.6800      0.1    246.6800       0.0000  0.0000  csr_regfile_DW01_inc_0_DW01_inc_12
+u_core/u_ex_mem_reg                 1478.6800      0.7    461.4400    1017.2400  0.0000  ex_mem_reg
+u_core/u_ex_top                     3390.2400      1.7    478.2400       0.0000  0.0000  ex_top
+u_core/u_ex_top/add_125              278.6000      0.1    278.6000       0.0000  0.0000  ex_top_DW01_add_2
+u_core/u_ex_top/add_126              275.8000      0.1    275.8000       0.0000  0.0000  ex_top_DW01_add_1
+u_core/u_ex_top/add_148              126.0000      0.1    126.0000       0.0000  0.0000  ex_top_DW01_add_0
+u_core/u_ex_top/u_alu               1626.8000      0.8    576.8000       0.0000  0.0000  alu
+u_core/u_ex_top/u_alu/add_45         278.6000      0.1    278.6000       0.0000  0.0000  alu_DW01_add_0_DW01_add_4
+u_core/u_ex_top/u_alu/sll_49         441.0000      0.2    441.0000       0.0000  0.0000  alu_DW01_ash_0
+u_core/u_ex_top/u_alu/sub_46         330.4000      0.2    330.4000       0.0000  0.0000  alu_DW01_sub_0_DW01_sub_4
+u_core/u_ex_top/u_branch             604.8000      0.3    175.5600       0.0000  0.0000  branch
+u_core/u_ex_top/u_branch/add_85      278.6000      0.1    278.6000       0.0000  0.0000  branch_DW01_add_0_DW01_add_3
+u_core/u_ex_top/u_branch/r66         150.6400      0.1    150.6400       0.0000  0.0000  branch_DW01_cmp6_0_DW01_cmp6_1
+u_core/u_forwarding_unit              89.8800      0.0     89.8800       0.0000  0.0000  forwarding_unit
+u_core/u_hazard_unit                  44.2400      0.0     44.2400       0.0000  0.0000  hazard_unit
+u_core/u_id_ex_reg                  1623.4400      0.8    505.9600    1117.4800  0.0000  id_ex_reg
+u_core/u_id_top                    12557.1600      6.3      8.6800       0.0000  0.0000  id_top
+u_core/u_id_top/u_ctrl                40.3200      0.0     40.3200       0.0000  0.0000  ctrl
+u_core/u_id_top/u_decoder             69.1600      0.0     69.1600       0.0000  0.0000  decoder
+u_core/u_id_top/u_imm_gen            110.8800      0.1    110.8800       0.0000  0.0000  imm_gen
+u_core/u_id_top/u_regfile          12328.1200      6.2   6306.9999    6021.1201  0.0000  regfile_SHADOW_EN0
+u_core/u_if_id_reg                   557.4800      0.3    175.5600     381.9200  0.0000  if_id_reg
+u_core/u_ifu_top                     616.0000      0.3    210.8400       0.0000  0.0000  ifu_top
+u_core/u_ifu_top/r54                 126.0000      0.1    126.0000       0.0000  0.0000  ifu_top_DW01_add_0_DW01_add_5
+u_core/u_ifu_top/u_pc_reg            279.1600      0.1     91.0000     188.1600  0.0000  pc_reg
+u_core/u_interrupt_controller        220.6400      0.1     75.8800       0.0000  0.0000  interrupt_controller
+u_core/u_interrupt_controller/add_97_aco
+                                     144.7600      0.1    144.7600       0.0000  0.0000  interrupt_controller_DW01_add_0_DW01_add_6
+u_core/u_interrupt_pipeline         1530.4800      0.8    623.2800     907.2000  0.0000  interrupt_pipeline
+u_core/u_mem_top                       0.0000      0.0      0.0000       0.0000  0.0000  mem_top
+u_core/u_mem_wb_reg                 1159.2000      0.6    353.6400     805.5600  0.0000  mem_wb_reg
+u_core/u_wb_top                      168.5600      0.1      0.0000       0.0000  0.0000  wb_top
+u_core/u_wb_top/u_wb_mux             168.5600      0.1    168.5600       0.0000  0.0000  wb_mux
+u_data_ram                        163419.2020     81.5  51024.9598  112394.2422  0.0000  data_ram
+u_gpio                              2367.9600      1.2    853.7200    1514.2400  0.0000  gpio
+u_i2c_master                        1064.0000      0.5    505.1200     500.3600  0.0000  i2c_master
+u_i2c_master/add_235                  58.5200      0.0     58.5200       0.0000  0.0000  i2c_master_DW01_inc_0_DW01_inc_4
+u_inst_rom                            15.6800      0.0     15.6800       0.0000  0.0000  inst_rom
+u_spi_master                        1151.3600      0.6    562.5200     530.3200  0.0000  spi_master
+u_spi_master/add_223                  58.5200      0.0     58.5200       0.0000  0.0000  spi_master_DW01_inc_1_DW01_inc_6
+u_timer                             1012.4800      0.5    488.0400     419.4400  0.0000  timer
+u_timer/sub_86                       105.0000      0.1    105.0000       0.0000  0.0000  timer_DW01_dec_0_DW01_dec_1
+u_uart_ctrl                         2840.3200      1.4    932.1200    1249.9200  0.0000  uart_ctrl_CLK_FREQ200000000_BAUD_RATE115200
+u_uart_ctrl/add_232                  121.2400      0.1    121.2400       0.0000  0.0000  uart_ctrl_CLK_FREQ200000000_BAUD_RATE115200_DW01_inc_1_DW01_inc_8
+u_uart_ctrl/u_uart_tx                537.0400      0.3    129.6400     286.1600  0.0000  uart_tx_CLK_FREQ200000000_BAUD_RATE115200
+u_uart_ctrl/u_uart_tx/r87            121.2400      0.1    121.2400       0.0000  0.0000  uart_tx_CLK_FREQ200000000_BAUD_RATE115200_DW01_inc_0_DW01_inc_11
+--------------------------------  -----------  -------  ----------  -----------  ------  -----------------------------------------------------------------
+Total                                                   70640.3597  129804.9224  0.0000
+
+1

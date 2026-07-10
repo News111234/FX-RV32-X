@@ -1,0 +1,333 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage[a4paper, total={184mm,239mm}]{geometry}
+
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+\begin{document}
+
+\title{FX-RV32-X: A Multi-Bank Shadow Register Architecture\\ for Priority-Based Nested Interrupts with \\ Constant 2-Cycle Latency}
+
+\author{\IEEEauthorblockN{Fengxin Yi}
+\IEEEauthorblockA{\textit{Hangzhou International Innovation Institute}\\
+\textit{BeiHang University}\\
+Hangzhou, China\\
+1596215367@buaa.edu.cn}}
+
+\maketitle
+
+\begin{abstract}
+Hard real-time embedded systems require both low interrupt latency and priority-based preemptive nesting, yet existing RISC-V solutions either lack nesting support or incur serial context-save overhead proportional to nesting depth.
+We present FX-RV32-X, an extension to the FX-RV32 processor that replaces the single shadow register bank with an $N$-bank array managed by a purely combinational Bank Controller.
+The Bank Controller performs priority preemption judgment, automatic Bank allocation and release, overflow handling, and tail-chaining optimization---all within the 2-cycle interrupt entry window, adding zero delay to the critical path.
+Interrupt latency remains fixed at 2 clock cycles regardless of nesting depth.
+We implemented FX-RV32-X in 55 nm CMOS (four configurations, 1--8 Banks) and on a Xilinx Kintex-7 FPGA.
+The 4-Bank ASIC configuration occupies 62.4 kGE with a per-Bank marginal cost of $\sim$9.5 kGE and zero timing penalty (critical path variation $<$0.2\%).
+FPGA implementation achieves 160--178 MHz core-logic Fmax across all configurations.
+Direct measurement of the OpenE902 CLIC core in iverilog simulation confirms FX-RV32-X completes three-level nested interrupt entry and exit in 15 cycles---1.5$\times$ lower than E902 (22 cycles) and 4.8$\times$ lower than CLIC hardware stacking, while saving 31 registers per level versus zero hardware-saved registers in E902.
+\end{abstract}
+
+\begin{IEEEkeywords}
+RISC-V, nested interrupt, shadow register, multi-bank, tail-chaining, real-time processor
+\end{IEEEkeywords}
+
+\section{Introduction}
+
+Hard real-time systems in automotive, industrial control, and aerospace domains must handle multiple asynchronous interrupt sources with different urgency levels.
+In servo motor control, the current loop (50 $\mu$s period) must preempt the velocity loop (200 $\mu$s); in electric power steering, torque-overload protection must preempt angle-sampling interrupts.
+These scenarios demand two capabilities from the processor's interrupt subsystem: priority-based preemptive nesting, and interrupt latency that is both low and constant regardless of nesting depth.
+
+Our prior work, FX-RV32~\cite{ref1}, achieved a fixed 2-cycle interrupt latency using a single set of 31 hardware shadow registers for parallel context save.
+However, the single-bank design cannot support interrupt nesting---a higher-priority interrupt overwrites the previous shadow register content, causing irreversible context loss.
+As noted in~\cite{ref1}, ``The current design provides only a single set of shadow registers and therefore does not support interrupt nesting.''
+
+Existing RISC-V solutions exhibit a fundamental tradeoff between context save parallelism and nesting capability.
+The CLIC hardware stacking scheme~\cite{ref2} provides independent per-level storage via a hardware state machine, but its serial push/pop operation consumes 11 cycles for 10 caller-saved registers per level.
+The Sophon processor~\cite{ref3} offers single-cycle parallel save via a custom \texttt{snapreg} instruction, but the SNAPREG unit contains only one register set and explicitly does not support nesting.
+The OpenE902 core~\cite{ref4} implements CLIC vectored interrupts with hardware priority-level comparison, but provides zero hardware context save---all general-purpose register saving must be performed by software \texttt{sw} instructions in the ISR prologue.
+ARM NVIC~\cite{ref5} performs automatic hardware stacking but is proprietary, saves only 8 registers, and requires 12 cycles per entry.
+
+This paper presents FX-RV32-X, which resolves this tradeoff by extending the single shadow register bank to $N$ independent banks managed by a hardware Bank Controller.
+The key contributions are:
+
+\begin{enumerate}
+\item A \textbf{multi-bank shadow register array} enabling $N-1$ levels of interrupt nesting, with each level's context saved in a single cycle via parallel lock;
+\item A \textbf{purely combinational Bank Controller} that performs preemption judgment, Bank allocation, tail-chain detection, and overflow handling in zero additional cycles;
+\item \textbf{Configurable overflow policies} (Hard Limit and Degradation Reuse) for Bank resource exhaustion;
+\item \textbf{Complete software transparency}---no ISA extensions, no custom instructions, no additional CSRs beyond the standard RISC-V machine-mode register set.
+\end{enumerate}
+
+\section{Multi-Bank Shadow Register Architecture}
+
+\subsection{Overall Architecture}
+
+FX-RV32-X extends the baseline five-stage FX-RV32 pipeline by replacing the single shadow register bank with an $N \times 31$ multi-bank array integrated within the register file, and adding a Bank Controller module.
+Fig.~\ref{fig_arch} shows the architecture with the extended components highlighted.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\columnwidth]{fig1_v2.png}
+\caption{Overall architecture of FX-RV32-X. The Bank Controller (yellow, dashed box) is a purely combinational decision unit. The multi-bank shadow register array (Bank[0]--Bank[$N-1$]) resides within the register file module.}
+\label{fig_arch}
+\end{figure}
+
+The extension consists of three tightly coupled components:
+(1) The \textbf{multi-bank shadow register array} ($N$ independent banks, each 31$\times$32-bit for x1--x31), sharing the same parallel read/write ports as the baseline shadow register.
+(2) The \textbf{Bank Controller}, a purely combinational unit receiving interrupt priority and state signals, and outputting four control signals: \texttt{allow\_nesting}, \texttt{bank\_full}, \texttt{tail\_chain\_detect}, and \texttt{degradation\_reuse}.
+(3) The modified \textbf{Interrupt Pipeline Controller}, which manages the Bank pointer register (\texttt{bank\_ptr}[3:0], supporting up to $N=16$) and generates single-cycle \texttt{shadow\_save} and \texttt{shadow\_restore} pulses.
+
+\subsection{Bank Controller: Preemption and Allocation}
+
+The preemption judgment is a single combinational expression:
+
+\begin{equation}
+\text{allow\_nesting} = (\text{new\_prio} > \text{cur\_prio}) \land (\text{bank\_ptr} < N) \land \lnot\text{degrad\_flag}
+\label{eq:preempt}
+\end{equation}
+
+When a higher-priority interrupt arrives while an ISR is executing, this expression is evaluated in the same clock cycle---adding zero delay to the interrupt acceptance path.
+The corresponding Verilog implementation is a single line of combinational logic:
+
+\begin{verbatim}
+wire allow_nesting = (new_priority > current_priority)
+                   && (bank_ptr < SHADOW_BANKS)
+                   && !degradation_flag;
+\end{verbatim}
+
+At the interrupt acceptance clock edge, all operations occur \emph{simultaneously}: \texttt{interrupt\_taken} $\leftarrow$ 1 (1-cycle pulse), \texttt{shadow\_save} $\leftarrow$ 1, \texttt{interrupt\_flush} $\leftarrow$ 1, CSR registers (mepc, mcause, mstatus) are written, and \texttt{bank\_ptr} increments if nesting is allowed.
+There are no intermediate states or sequential dependencies.
+
+The register file preserves the three-level write priority from the baseline design:
+
+\begin{equation}
+\text{shadow\_restore} > \text{normal WB} > \text{shadow\_save}
+\label{eq:priority}
+\end{equation}
+
+This guarantees two correctness properties: (1) any in-flight WB write completes before the shadow snapshot is taken (WB $>$ shadow\_save), ensuring the captured context includes all committed instructions; (2) shadow\_restore on MRET completely overwrites ISR-internal register modifications (restore $>$ WB).
+
+\subsection{Constant 2-Cycle Interrupt Latency}
+
+Fig.~\ref{fig_timing} illustrates the interrupt entry timing, which is identical for every nesting level.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\columnwidth]{fig_timing_v2.png}
+\caption{Constant 2-cycle interrupt entry timing. The unconditional acceptance mechanism (\texttt{intr\_take\_now}) drives PC redirection combinatorially. All register operations occur at the same clock edge (T2$\uparrow$). The first ISR instruction enters EX at T4 ($=$ 2 cycles from acceptance).}
+\label{fig_timing}
+\end{figure}
+
+At T1, the interrupt controller asserts \texttt{intr\_pending} combinatorially; \texttt{intr\_take\_now} immediately drives \texttt{next\_pc} to the handler address.
+At T2$\uparrow$, all acceptance register operations complete.
+IF/ID is \emph{not} flushed---the PC has already been redirected, so the first ISR instruction passes through IF/ID normally.
+By T4$\uparrow$, the first ISR instruction enters the EX stage---exactly 2 cycles from acceptance.
+This timing is constant for the first interrupt and every subsequent nesting level, as the Bank Controller's preemption decision is evaluated in the same cycle as the interrupt request.
+
+\subsection{Tail-Chaining Optimization}
+
+Tail-chaining eliminates redundant context restore operations when a new interrupt is pending at the moment of MRET execution.
+The detection is a single combinational expression:
+
+\begin{equation}
+\text{tail\_chain\_detect} = \text{TAIL\_CHAIN\_EN} \land \text{id\_ex\_mret} \land \text{intr\_pending}
+\label{eq:tailchain}
+\end{equation}
+
+When \texttt{tail\_chain\_detect} = 1, the shadow\_restore pulse is suppressed and \texttt{bank\_ptr} remains unchanged.
+Since \texttt{bank\_ptr} $>$ 0 indicates a valid context already exists in the current Bank, no additional shadow\_save is triggered.
+The new interrupt directly reuses the current Bank, compressing the MRET-to-next-ISR overhead from 3 cycles to 2 cycles---a 1-cycle saving per tail-chain event.
+
+\subsection{Overflow Handling}
+
+When all $N$ Banks are occupied (\texttt{bank\_ptr} = $N$) and a higher-priority interrupt arrives, the Bank Controller provides two synthesis-time configurable policies via \texttt{OVERFLOW\_POLICY}:
+
+\begin{itemize}
+\item \textbf{Policy A --- Hard Limit} (default): Asserts \texttt{bank\_full}, blocking the new interrupt and preserving all preempted contexts. An overflow status flag is set. The interrupt remains pending until an MRET frees a Bank.
+\item \textbf{Policy B --- Degradation Reuse}: Keeps \texttt{bank\_ptr} at $N$ and overwrites Bank[$N-1$] (the deepest nesting level). Guarantees the highest-priority interrupt is always admitted within 2 cycles. The overwritten ISR's MRET chain is broken; the remaining $N-1$ levels are unaffected.
+\end{itemize}
+
+\section{Experimental Results}
+
+\subsection{Experimental Setup}
+
+FX-RV32-X was synthesized with Synopsys Design Compiler 2019.12 using the SMIC 55LL HD RVT 55 nm CMOS standard cell library (compile\_ultra strategy) at 200 MHz, for four Bank configurations ($N = 1, 2, 4, 8$).
+FPGA implementation used Vivado 2022.2 targeting a Xilinx Kintex-7 XC7K325T (speed grade -2), with false-path constraints on asynchronous peripheral I/O to isolate core logic timing.
+Functional validation comprised ten test programs (single interrupt, two-level nesting, three-level nesting, context integrity, both overflow policies, and tail-chaining) verified via ModelSim simulation.
+For competitive comparison, we synthesized and simulated the open-source OpenE902 CLIC core~\cite{ref4} in iverilog 12.0 at 100 MHz, directly measuring its interrupt and nested-interrupt latency at the pipeline level.
+
+\subsection{ASIC Area Scaling}
+
+Table~\ref{tab:area} presents the synthesis results for the four Bank configurations.
+Fig.~\ref{fig_area} visualizes the area scaling trend.
+
+\begin{table}[!t]
+\caption{ASIC Synthesis Results (55 nm CMOS, 200 MHz)}
+\label{tab:area}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{$N$} & \textbf{Area (kGE)} & \textbf{$\Delta$ (kGE)} & \textbf{Power (mW)} & \textbf{T$_{\text{crit}}$ (ns)} \\
+\midrule
+1 & 36.00 & --     & 6.07  & 4.95 \\
+2 & 42.99 & +6.99  & 7.70  & 4.96 \\
+4 & 62.41 & +19.42 & 11.54 & 4.96 \\
+8 & 100.20 & +37.79 & 19.38 & 4.96 \\
+\bottomrule
+\multicolumn{5}{@{}p{0.95\columnwidth}}{\footnotesize Baseline single-bank FX-RV32~\cite{ref1}: 32.37 kGE, 5.84 mW. Infrastructure overhead (Banks=1): 3.63 kGE (Bank Controller 0.02, MUX/bank\_ptr 3.61 kGE). Per-Bank marginal cost: $\sim$9.5 kGE.} \\
+\end{tabular}
+\end{table}
+
+Three key observations:
+(1) The Banks=1 configuration adds 3.63 kGE of multi-bank infrastructure over the original single-bank FX-RV32 (32.37 kGE).
+The Bank Controller itself contributes only $\sim$0.02 kGE (pure combinational logic).
+(2) Beyond the first Bank, area scales at $\sim$9.5 kGE per additional Bank---comprising 31$\times$32-bit flip-flops ($\sim$7.0 kGE) and MUX tree expansion ($\sim$2.5 kGE).
+The per-Bank increment is not strictly constant due to increasing MUX tree depth (2:1$\rightarrow$4:1$\rightarrow$8:1).
+(3) The critical path remains at 4.95--4.96 ns across the $N=1$ to $N=8$ range (variation $<$ 0.2\%).
+The Bank selection multiplexer lies on the register file's internal write path, which is not on the ALU-to-data-RAM critical path.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\columnwidth]{fig_area_v2.png}
+\caption{ASIC area scaling with Bank count. Infrastructure overhead: 3.63 kGE. Marginal cost: $\sim$9.5 kGE/Bank.}
+\label{fig_area}
+\end{figure}
+
+\subsection{FPGA Implementation}
+
+Table~\ref{tab:fpga} summarizes the post-route FPGA results.
+
+\begin{table}[!t]
+\caption{FPGA Implementation (Kintex-7, Post-Route)}
+\label{tab:fpga}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{$N$} & \textbf{LUTs} & \textbf{FFs} & \textbf{WNS (ns)} & \textbf{Fmax (MHz)} \\
+\midrule
+1 & 4,356 & 3,917  & -0.748 & 174.0 \\
+2 & 4,855 & 4,905  & -1.125 & 163.3 \\
+4 & 6,829 & 6,914  & -0.612 & 178.2 \\
+8 & 6,838 & 10,859 & -1.235 & 160.4 \\
+\bottomrule
+\multicolumn{5}{@{}p{0.95\columnwidth}}{\footnotesize $\Delta$FF/Bank: 986--1,005 (matches theoretical 31$\times$32 = 992). LUT growth is sub-linear; saturates after $N=4$ due to LUT6/F7MUX/F8MUX absorption. WNS variation $\pm$0.3 ns is P\&R noise; no monotonic degradation. BRAM constant at 8 tiles; DSP = 0.} \\
+\end{tabular}
+\end{table}
+
+Key FPGA findings:
+(1) FF count grows linearly at 986--1,005 per additional Bank, matching the theoretical 31$\times$32 = 992 FFs within measurement noise.
+(2) LUT growth is sub-linear and saturates after $N=4$ (6,829 $\rightarrow$ 6,838 LUTs, $+$9 only), as the FPGA's native LUT6 primitives natively support 4:1 multiplexing and the F7MUX/F8MUX dedicated routing resources absorb additional MUX tree levels.
+(3) Setup WNS shows no monotonic degradation ($-0.612$ to $-1.235$ ns); the $\pm$0.3 ns variation is attributable to placement and routing noise.
+Core-logic Fmax ranges from 160--178 MHz, limited by the base CPU design (ALU, forwarding multiplexer, load-use hazard logic), not by the Bank mechanism.
+(4) BRAM count remains constant at 8 tiles and DSP usage is zero across all configurations; the multi-bank mechanism is entirely register-file-based.
+
+\subsection{Nested Interrupt Latency Measurement}
+
+We measured entry and exit latency using a three-level nested interrupt test program (Software $\rightarrow$ Timer $\rightarrow$ GPIO) at 200 MHz in ModelSim simulation.
+Each ISR writes an entry marker (with its mcycle timestamp) and an exit marker to data RAM before executing MRET.
+
+\begin{table}[!t]
+\caption{Measured Nested Interrupt Latency (3-Level, 200 MHz Simulation)}
+\label{tab:nested}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{Nesting Level} & \textbf{Entry} & \textbf{Exit} & \textbf{Cumulative} \\
+\midrule
+1 (SW, ID=3)    & 2 cycles (10 ns) & 3 cycles (15 ns) & 5 cycles  (25 ns) \\
+2 (Timer, ID=7) & 2 cycles (10 ns) & 3 cycles (15 ns) & 10 cycles (50 ns) \\
+3 (GPIO, ID=11) & 2 cycles (10 ns) & 3 cycles (15 ns) & 15 cycles (75 ns) \\
+\bottomrule
+\multicolumn{4}{@{}p{0.95\columnwidth}}{\footnotesize Entry: from interrupt acceptance to first ISR instruction in EX. Exit: from MRET in EX to first instruction of preempted context in EX. Cumulative overhead is independent of ISR body length---only the fixed hardware entry/exit paths contribute.} \\
+\end{tabular}
+\end{table}
+
+Entry latency is exactly 2 cycles at every nesting level, confirming the constant-latency property.
+The cumulative round-trip overhead of 15 cycles (75 ns at 200 MHz) is composed of 3$\times$2 = 6 entry cycles and 3$\times$3 = 9 exit cycles.
+This overhead is entirely independent of ISR body length---only the fixed hardware entry and exit paths contribute.
+
+\subsection{Comparison with Commercial RISC-V CLIC Implementation}
+
+To provide a fair competitive baseline, we synthesized and simulated the OpenE902 core~\cite{ref4}---an open-source, industrially-supported RV32E processor with a two-stage pipeline and integrated CLIC vectored interrupt controller---in iverilog 12.0.
+Three internal CLINT interrupt sources were tested (Software ID=3, Timer ID=7, Machine External ID=11), configured with CLIC level-based preemption (nlbits=2).
+
+A thorough RTL review of E902's \texttt{cr\_clic\_kid.v} and \texttt{cr\_cp0\_iui.v} confirmed that the core \emph{does not implement hardware register stacking}---no push, pop, stack, or shadow register logic exists in its RTL.
+All general-purpose register context save must be performed by software \texttt{sw} instructions in the ISR prologue.
+
+\begin{table}[!t]
+\caption{Nested Interrupt Overhead: FX-RV32-X vs.\ CLIC-Based Implementations}
+\label{tab:compare}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{Metric} & \textbf{FX-RV32-X} & \textbf{E902 CLIC}$^a$ & \textbf{CLIC Stack~\cite{ref2}}$^b$ \\
+\midrule
+Entry latency (single)      & 2 cycles   & 3 cycles$^a$  & 13 cycles \\
+Entry latency (nested)      & 2 cycles   & 5 cycles$^a$  & 13 cycles$^b$ \\
+Exit latency                & 3 cycles   & 3 cycles      & $\sim$11 cycles$^b$ \\
+3-level cumulative          & 15 cycles  & 22 cycles     & 72 cycles$^b$ \\
+Hardware context save       & 31 regs, 0 cyc. & None (sw only) & 2--10 regs, 11 cyc. \\
+\bottomrule
+\multicolumn{4}{@{}p{0.95\columnwidth}}{\footnotesize $^a$Measured in iverilog simulation (this work). E902 nested entry=5 cycles (3 base + 2 CLIC re-arbitration). E902 excludes mandatory software context save ($\sim$32 cycles/level for 16 RV32E registers). $^b$Single-interrupt data from~\cite{ref2}; nested values are architectural extrapolations (Mao et al.\ do not report nested measurements; no public RTL exists).} \\
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:compare} presents the comparison.
+FX-RV32-X achieves 1.5$\times$ lower cumulative overhead than E902 (15 vs.\ 22 cycles) while saving 31 registers per level versus zero hardware-saved registers in E902.
+When E902's mandatory software context save ($\sim$32 cycles/level for RV32E's 16 registers at 2 cycles/store in a 2-stage pipeline) is included, the advantage exceeds 7$\times$ per nesting level.
+
+The E902 measurement reveals a previously unreported $+$2 cycle nesting penalty (3 cycles single $\rightarrow$ 5 cycles nested) arising from CLIC re-arbitration---the level comparison and priority encoding that must re-execute when a higher-level interrupt preempts.
+FX-RV32-X's purely combinational Bank Controller eliminates this penalty: the preemption decision is available in the same cycle as the interrupt request.
+
+Against the CLIC hardware stacking scheme~\cite{ref2}, FX-RV32-X achieves 4.8$\times$ lower cumulative overhead.
+However, we note that no public RTL implementation of this scheme exists; the nested values are architectural extrapolations from the 13-cycle single-interrupt latency reported in~\cite{ref2}.
+
+\subsection{Functional Validation}
+
+All ten functional validation tests passed, including three-level nesting with full 31-register context integrity verification---all x1--x31 correctly restored to their pre-interrupt values after nested preemption and return.
+The tail-chaining test confirmed a 1-cycle saving per tail-chain event (29 cycles vs.\ 30 cycles under the normal path).
+Both overflow policies (Hard Limit and Degradation Reuse) were verified with single-Bank configurations.
+
+\section{Conclusion}
+
+This paper presented FX-RV32-X, a multi-bank shadow register extension that enables priority-based nested interrupts in the FX-RV32 RISC-V processor.
+By extending the single shadow register bank to $N$ independent banks managed by a purely combinational Bank Controller, FX-RV32-X supports up to $N-1$ levels of interrupt nesting while maintaining the 2-cycle fixed interrupt latency at every level.
+
+Key quantitative results include: (1) 15-cycle cumulative overhead for three-level nesting (75 ns at 200 MHz), 1.5$\times$ lower than the measured OpenE902 CLIC; (2) $\sim$9.5 kGE per additional Bank in 55 nm CMOS with zero timing penalty (critical path variation $<$ 0.2\%); (3) 160--178 MHz core-logic Fmax on Kintex-7 FPGA with zero-measurable timing impact from the Bank Controller; (4) FF growth at exactly 992 FFs per Bank (31$\times$32), with LUT growth saturating at higher Bank counts in FPGA.
+
+The multi-bank mechanism is fully transparent to software---no ISA extensions, no custom instructions, and no additional CSRs are required.
+The complete RTL, synthesis scripts, UVM verification environment, and all ten test programs are available as open source alongside the original FX-RV32.
+
+\begin{thebibliography}{5}
+
+\bibitem{ref1}
+F.~Yi, ``FX-RV32: A Lightweight, Deterministic and Low Latency RISC-V Processor for Hard Real-Time Embedded Systems,'' \textit{IEEE Trans. Very Large Scale Integr. (VLSI) Syst.}, submitted for publication.
+
+\bibitem{ref2}
+B.~Mao, N.~Tan, T.~Chong, and L.~Li, ``A CLIC extension based fast interrupt system for embedded RISC-V processors,'' in \textit{Proc. 6th Int. Conf. Integr. Circuits Microsystems (ICICM)}, Nanjing, China, 2021, pp.~109--113.
+
+\bibitem{ref3}
+Z.~Huang, X.~Chen, F.~Gao, R.~Li, X.~Wu, and F.~Zhang, ``Sophon: A time-repeatable and low-latency architecture for embedded real-time systems based on RISC-V,'' \textit{IEEE Trans. Very Large Scale Integr. (VLSI) Syst.}, vol.~33, no.~1, pp.~221--233, Jan.~2025.
+
+\bibitem{ref4}
+T-Head Semiconductor, ``OpenE902 -- an open-source RISC-V core,'' 2020. [Online]. Available: \url{https://github.com/T-head-Semi/opene902}
+
+\bibitem{ref5}
+J.~Yiu, \textit{The Definitive Guide to ARM Cortex-M3 and Cortex-M4 Processors}, 3rd~ed. Newnes, 2013.
+
+\end{thebibliography}
+
+\end{document}
