@@ -26,6 +26,7 @@
 ../core/csr/csr_instructions.v
 ../core/interrupt/interrupt_controller.v
 ../core/interrupt/interrupt_pipeline.v
+../core/interrupt/bank_controller.v
 ../core/core_top.v
 
 // ==== soc — SoC 集成 ====
