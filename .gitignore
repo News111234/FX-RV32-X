@@ -1,8 +1,55 @@
+# ============================================================================
+# NEVER COMMIT: Papers, Thesis, Patents, Personal Files
+# ============================================================================
+*.tex
+*.docx
+*.pdf
+doc/
+专利/
+conference_tex/
+syn/
+FX-RV32*.md
+image.md
+latex_error.md
+论文*.md
+对比.md
+新建*.docx
+~$*.docx
+小模型*.docx
+*.pdf
+
+# ============================================================================
+# Claude / AI assistant config (personal, not project)
+# ============================================================================
+.claude/
+CLAUDE.md
+claude_*.txt
+Caution.md
+1.md
+problem.txt
+GIPIO_Sophon.md
+
+# ============================================================================
+# Temp / scratch files
+# ============================================================================
+A.v
+B.v
+cpu_diagram.html
+gen_report.py
+deterministic_test.S
+DC_command.txt
+nested_test.hex
+nested_wave.vcd
+
+# ============================================================================
 # Vivado
+# ============================================================================
 vivado/RISCV_TEST/
-vivado/**/synth_*/
-vivado/**/*.backup.jou
-vivado/**/*.backup.log
+vivado/*.jou
+vivado/*.log
+vivado/*.backup.jou
+vivado/*.backup.log
+vivado/tight_setup_hold_pins.txt
 *.jou
 *.log
 *.str
@@ -17,15 +64,35 @@ vivado/**/*.backup.log
 *.ip_user_files/
 *.sim/
 *.gen/
+*.runs/
+*.srcs/
 
+# ============================================================================
 # Verilator simulation
+# ============================================================================
 sim/obj_dir/
 sim/*.vcd
 sim/*.fst
+sim/work/
+sim/wlf*
+sim/transcript
+sim/vsim.wlf
+sim/_wp*
+sim/dump.vcd
+sim/nested_wave.vcd
+sim/nested_intr_wave.vcd
+sim/nested_soc_wave.vcd
+sim/gpio_test.vcd
+sim/program.hex
 
+# ============================================================================
 # Modelsim
+# ============================================================================
 uvm/work/
-uvm/**/work/
+uvm/transcript
+uvm/vsim.wlf
+uvm/vish_stacktrace.vstf
+work/
 transcript
 vsim.wlf
 *.wlf
@@ -36,19 +103,27 @@ vsim.dbg
 *.ucdb
 vcover*
 
+# ============================================================================
 # Python
+# ============================================================================
 __pycache__/
 *.pyc
 *.pyo
 
-# OS
+# ============================================================================
+# IDE / OS
+# ============================================================================
+.vscode/
 .DS_Store
 Thumbs.db
 *.swp
 *.swo
 *~
 
-# Vivado backup files
-*.backup.jou
-*.backup.log
+# ============================================================================
+# Synthesis / Build artifacts
+# ============================================================================
 *.sdf
+*.ddc
+*.sdc
+*_netlist.v
