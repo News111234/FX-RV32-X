@@ -31,9 +31,9 @@ python asm_to_hex.py ../uvm/asm/load_use_test.s ../uvm/hex/load_use_test.hex
 python asm_to_hex.py ../uvm/asm/intr_test.s    ../uvm/hex/intr_test.hex
 ```
 
-### 1.2 方式一：在 Windows CMD / Git Bash 终端里跑（推荐）
+### 1.2 方式一：终端命令行，只看文字结果（最快）
 
-> 在终端里敲一行命令，自动完成编译 → 仿真 → 打印结果，全程不需要打开 Modelsim 界面。
+> 加 `-c` 表示控制台模式，不弹 GUI，结果直接打印在终端。
 
 **Windows CMD：**
 
@@ -51,29 +51,62 @@ UVM_HOME=/d/modeltech64_10.6e/verilog_src/uvm-1.2 \
   vsim -c -do "set HEX_FILE hex/load_use_test.hex; set TEST_NAME cpu_test_hazard; do run_msim.tcl"
 ```
 
-- `-c`：控制台模式，不弹 GUI，所有输出直接打印在当前终端
-- `UVM_HOME`：指向 Modelsim 安装目录下的 UVM 1.2 源码（根据自己的 Modelsim 路径调整）
-- `HEX_FILE` / `TEST_NAME`：指定测试程序和测试类
+- `-c`：控制台模式，不弹 GUI
+- `UVM_HOME`：指向 Modelsim 安装目录下的 UVM 1.2 源码
 
 仿真结束后会自动打印覆盖率报告和 Scoreboard 结果。
 
 ---
 
-### 1.3 方式二：在 Modelsim 控制台（Transcript）里跑
+### 1.3 方式二：终端命令行 + GUI 波形（推荐调试用）
 
-> 先打开 Modelsim 图形界面，在底部的 Transcript 窗口敲命令。
+> **去掉 `-c`，加上 `set GUI_MODE 1`**，Modelsim 窗口会自动弹出来并显示波形。
+
+**Windows CMD：**
+
+```cmd
+cd uvm
+vsim -do "set HEX_FILE hex/load_use_test.hex; set TEST_NAME cpu_test_hazard; set GUI_MODE 1; do run_msim.tcl"
+```
+
+**用 run_uvm.bat 更简单（Windows CMD）：**
+
+```cmd
+cd uvm
+run_uvm.bat hazard gui        :: 冒险测试 + 波形
+run_uvm.bat intr gui          :: 中断测试 + 波形
+run_uvm.bat alu gui           :: 基础指令测试 + 波形
+run_uvm.bat nested gui        :: 嵌套中断测试 + 波形
+```
+
+> `run_uvm.bat` 其实就是帮你拼好了上面那串 `vsim -do "..." ` 命令，加 `gui` 参数就行。
+
+**Git Bash：**
+
+```bash
+cd uvm
+vsim -do "set HEX_FILE hex/load_use_test.hex; set TEST_NAME cpu_test_hazard; set GUI_MODE 1; do run_msim.tcl"
+```
+
+执行后 Modelsim 自动打开，波形窗口按分组排列好，直接看。
+
+---
+
+### 1.4 方式三：在 Modelsim 图形界面里操作
+
+> 先打开 Modelsim，在底部 Transcript 窗口敲命令（跟方式一、二的命令一样，只是不拼在 `-do` 里）。
 
 **步骤**：
 
 **①** 双击 Modelsim 图标打开主窗口。
 
-**②** 在底部 **Transcript** 窗口切换目录：
+**②** 在底部 **Transcript** 窗口输入：
 
 ```
 cd uvm
 ```
 
-**③** 设置参数并启动（**控制台模式，只看文字输出**）：
+**③** 只看文字结果：
 
 ```
 set HEX_FILE hex/load_use_test.hex
@@ -81,7 +114,7 @@ set TEST_NAME cpu_test_hazard
 do run_msim.tcl
 ```
 
-**或者想看波形**，加一行 `set GUI_MODE 1`：
+**④** 或者想看波形，加一行 `set GUI_MODE 1`：
 
 ```
 set HEX_FILE hex/load_use_test.hex
@@ -92,7 +125,7 @@ do run_msim.tcl
 
 ---
 
-### 1.4 波形窗口说明（GUI 模式下）
+### 1.5 波形窗口说明（GUI 模式下）
 
 波形窗口会自动弹出，信号已按以下分组添加好：
 
@@ -113,7 +146,7 @@ do run_msim.tcl
 - 搜索信号：`Ctrl+F`
 - 改变显示格式：右键信号 → **Radix** → 选 Hexadecimal / Decimal / Binary
 
-### 1.5 切换不同测试
+### 1.6 切换不同测试
 
 | 测试 | 命令 |
 |------|------|
@@ -126,7 +159,7 @@ do run_msim.tcl
 vdel -all
 ```
 
-### 1.6 环境变量说明
+### 1.7 环境变量说明
 
 TCL 脚本中可设置的变量：
 
