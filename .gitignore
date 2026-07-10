@@ -88,20 +88,21 @@ sim/program.hex
 # ============================================================================
 # Modelsim
 # ============================================================================
+transcript
+vsim.wlf
+vish_stacktrace.vstf
+work/
 uvm/work/
 uvm/transcript
 uvm/vsim.wlf
 uvm/vish_stacktrace.vstf
-work/
-transcript
-vsim.wlf
 *.wlf
-modelsim.ini
-vlog.opt
-vsim.dbg
 *.vstf
 *.ucdb
 vcover*
+modelsim.ini
+vlog.opt
+vsim.dbg
 
 # ============================================================================
 # Python

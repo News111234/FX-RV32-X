@@ -16,7 +16,7 @@ REM   run_uvm.bat alu mytest.hex     指定 hex 文件的基础指令测试
 REM   最后加 gui 参数开启波形 (如: run_uvm.bat nested gui)
 
 set TEST_NAME=cpu_test_alu
-set HEX_FILE=alu_test.hex
+set HEX_FILE=hex/alu_test.hex
 set GUI_MODE=0
 set SHADOW_BANKS=4
 set OVERFLOW_POLICY=0
@@ -27,35 +27,35 @@ if not "%1"=="" (
         set GUI_MODE=1
     ) else if "%1"=="intr" (
         set TEST_NAME=cpu_test_interrupt
-        set HEX_FILE=intr_test.hex
+        set HEX_FILE=hex/intr_test.hex
     ) else if "%1"=="hazard" (
         set TEST_NAME=cpu_test_hazard
-        set HEX_FILE=load_use_test.hex
+        set HEX_FILE=hex/load_use_test.hex
     ) else if "%1"=="alu" (
         set TEST_NAME=cpu_test_alu
         if not "%2"=="" set HEX_FILE=%2
     ) else if "%1"=="nested" (
         set TEST_NAME=cpu_test_nested
-        set HEX_FILE=nested_test.hex
+        set HEX_FILE=hex/nested_test.hex
     ) else if "%1"=="triple" (
         set TEST_NAME=cpu_test_triple
-        set HEX_FILE=triple_nested_test.hex
+        set HEX_FILE=hex/triple_nested_test.hex
     ) else if "%1"=="overflow" (
         set TEST_NAME=cpu_test_overflow
-        set HEX_FILE=overflow_test.hex
+        set HEX_FILE=hex/overflow_test.hex
         set SHADOW_BANKS=1
         set OVERFLOW_POLICY=0
     ) else if "%1"=="degradation" (
         set TEST_NAME=cpu_test_degradation
-        set HEX_FILE=degradation_test.hex
+        set HEX_FILE=hex/degradation_test.hex
         set SHADOW_BANKS=1
         set OVERFLOW_POLICY=1
     ) else if "%1"=="tailchain" (
         set TEST_NAME=cpu_test_tailchain
-        set HEX_FILE=tail_chain_test.hex
+        set HEX_FILE=hex/tail_chain_test.hex
     ) else if "%1"=="context" (
         set TEST_NAME=cpu_test_context
-        set HEX_FILE=context_integrity_test.hex
+        set HEX_FILE=hex/context_integrity_test.hex
     ) else (
         set HEX_FILE=%1
     )

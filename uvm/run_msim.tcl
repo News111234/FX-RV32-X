@@ -5,7 +5,7 @@
 
 # ===== 默认配置 =====
 if {![info exists TEST_NAME]}  { set TEST_NAME  cpu_test_alu }
-if {![info exists HEX_FILE]}   { set HEX_FILE   alu_test.hex }
+if {![info exists HEX_FILE]}   { set HEX_FILE   hex/alu_test.hex }
 if {![info exists GUI_MODE]}   { set GUI_MODE   0 }
 if {![info exists DUMP_VCD]}   { set DUMP_VCD   0 }
 if {![info exists COV_ENABLE]} { set COV_ENABLE 1 }
